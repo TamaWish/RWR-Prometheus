@@ -262,13 +262,10 @@ rwr_next_scheduled_reset_timestamp_seconds - time()
 
 ## Contributor and development setup
 
-Clone `RWR-Prometheus` next to `RWR-API`, or otherwise make RWR-API 5.1.2 available in the local
-Maven repository. For this multi-repository workspace:
+RWR-API 5.1.2 is published to Maven Central and Maven resolves it automatically. Clone
+RWR-Prometheus and run:
 
 ```shell
-cd ../RWR-API
-mvn clean install
-cd ../RWR-Prometheus
 mvn clean verify
 ```
 

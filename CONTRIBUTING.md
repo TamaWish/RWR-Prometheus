@@ -5,12 +5,10 @@ than opening a public issue.
 
 ## Development setup
 
-RWR-API is not yet consumed from Maven Central. Clone `RWR-API` next to this repository, then run:
+RWR-API 5.1.2 is published to Maven Central and is resolved automatically. Clone this repository,
+then run:
 
 ```shell
-cd ../RWR-API
-mvn clean install
-cd ../RWR-Prometheus
 mvn clean verify
 ```
 
