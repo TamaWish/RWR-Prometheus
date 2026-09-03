@@ -1,0 +1,15 @@
+{
+  "title": "ResourceWorldResetter",
+  "uid": "rwr-reset-metrics",
+  "schemaVersion": 41,
+  "version": 1,
+  "refresh": "5s",
+  "time": {"from": "now-6h", "to": "now"},
+  "panels": [
+    {"id": 1, "type": "timeseries", "title": "Reset outcomes", "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}, "targets": [{"expr": "sum by (world, result) (rate(rwr_reset_completions_total[5m]))", "legendFormat": "{{world}} {{result}}"}]},
+    {"id": 2, "type": "timeseries", "title": "Reset duration percentiles", "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}, "targets": [{"expr": "histogram_quantile(0.50, sum by (le, world) (rate(rwr_reset_duration_seconds_bucket[15m])))", "legendFormat": "p50 {{world}}"}, {"expr": "histogram_quantile(0.95, sum by (le, world) (rate(rwr_reset_duration_seconds_bucket[15m])))", "legendFormat": "p95 {{world}}"}]},
+    {"id": 3, "type": "timeseries", "title": "Active resets", "gridPos": {"x": 0, "y": 8, "w": 8, "h": 7}, "targets": [{"expr": "rwr_reset_in_progress", "legendFormat": "{{world}}"}]},
+    {"id": 4, "type": "stat", "title": "Last reset", "gridPos": {"x": 8, "y": 8, "w": 8, "h": 7}, "fieldConfig": {"defaults": {"unit": "dateTimeFromNow"}}, "targets": [{"expr": "rwr_last_reset_timestamp_seconds * 1000", "legendFormat": "{{world}}"}]},
+    {"id": 5, "type": "stat", "title": "Next scheduled reset", "gridPos": {"x": 16, "y": 8, "w": 8, "h": 7}, "fieldConfig": {"defaults": {"unit": "dateTimeFromNow"}}, "targets": [{"expr": "rwr_next_scheduled_reset_timestamp_seconds * 1000", "legendFormat": "{{world}}"}]}
+  ]
+}

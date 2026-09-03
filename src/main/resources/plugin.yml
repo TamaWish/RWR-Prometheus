@@ -1,0 +1,12 @@
+name: RWR-Prometheus
+version: '${project.version}'
+main: io.github.tamawish.rwr.prometheus.RwrPrometheusPlugin
+api-version: '1.21'
+folia-supported: true
+load: POSTWORLD
+authors: [TamaWish]
+description: Focused Prometheus reset metrics for ResourceWorldResetter on Bukkit-compatible servers
+website: https://github.com/TamaWish/RWR-Prometheus
+softdepend:
+  - ResourceWorldResetter
+  - ResourceWorldResetter-Paper-Folia
