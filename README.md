@@ -26,7 +26,7 @@ dashboard JSON as reference instead.
 
 ## Requirements
 
-- Java 21+
+- Java 21+ runtime (plugin bytecode is Java 21; 26.1+ servers on Java 25 still load this jar)
 - CraftBukkit, Spigot, Paper, Purpur, or Folia 1.21.4+
 - The matching ResourceWorldResetter 5.2 runtime with RWR-API 5.1+
 - Docker Desktop or Docker Engine with Compose, only for the bundled dashboard demo
@@ -269,9 +269,11 @@ RWR-Prometheus and run:
 mvn clean verify
 ```
 
-The build produces `target/RWR-Prometheus-1.0.0.jar` and the consumer-ready
-`target/RWR-Prometheus-1.0.0-dist.zip`. Prometheus client dependencies are shaded and relocated into
-the JAR; Bukkit/Spigot and RWR-API remain provided by the server.
+The build targets Java 21 bytecode (`maven.compiler.release` 21). CI may use a newer JDK to run
+Maven; that does not raise the class-file version. The build produces
+`target/RWR-Prometheus-1.0.0.jar` and the consumer-ready `target/RWR-Prometheus-1.0.0-dist.zip`.
+Prometheus client dependencies are shaded and relocated into the JAR; Bukkit/Spigot and RWR-API
+remain provided by the server.
 
 `mvn verify` tests configuration validation, successful/failed/cancelled and overlapping/repeated
 updates, world isolation, bounded labels, clock-controlled durations and timestamps, endpoint

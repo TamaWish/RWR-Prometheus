@@ -11,52 +11,69 @@ import java.util.List;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/** Bukkit entry point that exports ResourceWorldResetter reset metrics over HTTP. */
 public final class RwrPrometheusPlugin extends JavaPlugin {
-    private MetricsHttpServer exporter;
+  private MetricsHttpServer exporter;
 
-    @Override
-    public void onEnable() {
-        saveDefaultConfig();
-        RwrApi api;
-        try {
-            api = RwrApi.find(getServer()).orElseThrow(() -> new IllegalStateException(
-                    "ResourceWorldResetter API 5.1+ is unavailable; install a compatible Spigot or Paper/Folia RWR build."));
-        } catch (LinkageError error) {
-            fail("ResourceWorldResetter API is incompatible: " + error.getClass().getSimpleName());
-            return;
-        } catch (IllegalStateException error) {
-            fail(error.getMessage());
-            return;
-        }
-
-        try {
-            ExporterConfig config = ExporterConfig.load(getConfig());
-            List<String> worlds = api.managedWorlds().stream().map(world -> world.id()).toList();
-            CollectorRegistry registry = new CollectorRegistry();
-            ResetMetrics metrics = new ResetMetrics(
-                    registry, worlds, getDescription().getVersion(), Clock.systemUTC());
-            getServer().getPluginManager().registerEvents(new ResetEventListener(metrics), this);
-            exporter = new MetricsHttpServer(config, registry);
-            exporter.start();
-            exporter.ready();
-            getLogger().info("Prometheus exporter ready at " + config.scrapeUrl()
-                    + " for " + worlds.size() + " configured RWR world(s).");
-        } catch (IllegalArgumentException | IOException error) {
-            fail("Unable to start Prometheus exporter: " + error.getMessage());
-        }
+  /**
+   * Loads config, requires a compatible RWR API, registers reset listeners, and starts the
+   * Prometheus HTTP exporter. Disables this plugin when the API or exporter cannot start.
+   */
+  @Override
+  public void onEnable() {
+    saveDefaultConfig();
+    RwrApi api;
+    try {
+      api =
+          RwrApi.find(getServer())
+              .orElseThrow(
+                  () ->
+                      new IllegalStateException(
+                          "ResourceWorldResetter API 5.1+ is unavailable; install a compatible Spigot or Paper/Folia RWR build."));
+    } catch (LinkageError error) {
+      fail("ResourceWorldResetter API is incompatible: " + error.getClass().getSimpleName());
+      return;
+    } catch (IllegalStateException error) {
+      fail(error.getMessage());
+      return;
     }
 
-    @Override
-    public void onDisable() {
-        HandlerList.unregisterAll(this);
-        if (exporter != null) {
-            exporter.close();
-            exporter = null;
-        }
+    try {
+      ExporterConfig config = ExporterConfig.load(getConfig());
+      List<String> worlds = api.managedWorlds().stream().map(world -> world.id()).toList();
+      CollectorRegistry registry = new CollectorRegistry();
+      ResetMetrics metrics =
+          new ResetMetrics(registry, worlds, getDescription().getVersion(), Clock.systemUTC());
+      getServer().getPluginManager().registerEvents(new ResetEventListener(metrics), this);
+      exporter = new MetricsHttpServer(config, registry);
+      exporter.start();
+      exporter.ready();
+      getLogger()
+          .info(
+              "Prometheus exporter ready at "
+                  + config.scrapeUrl()
+                  + " for "
+                  + worlds.size()
+                  + " configured RWR world(s).");
+    } catch (IllegalArgumentException | IOException error) {
+      fail("Unable to start Prometheus exporter: " + error.getMessage());
     }
+  }
 
-    private void fail(String message) {
-        getLogger().severe(message);
-        getServer().getPluginManager().disablePlugin(this);
+  /**
+   * Unregisters listeners and stops the HTTP exporter so the scrape port is released before unload.
+   */
+  @Override
+  public void onDisable() {
+    HandlerList.unregisterAll(this);
+    if (exporter != null) {
+      exporter.close();
+      exporter = null;
     }
+  }
+
+  private void fail(String message) {
+    getLogger().severe(message);
+    getServer().getPluginManager().disablePlugin(this);
+  }
 }
