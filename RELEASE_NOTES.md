@@ -2,6 +2,12 @@
 
 This file highlights user-facing updates for operators installing or upgrading RWR-Prometheus. Full technical history lives in [CHANGELOG.md](CHANGELOG.md).
 
+## Version 1.0.1 — 2026-09-13
+
+This maintenance release hardens exporter startup and shutdown, configuration validation, HTTP readiness, and reset metric lifecycle handling. It keeps the RWR API 5.1.2 compatibility baseline and is verified for ResourceWorldResetter 5.2.0.
+
+Replace the plugin jar and restart the server. Existing configuration remains compatible.
+
 ## Version 1.0.0 — 2026-09-03
 
 **Headline:** First public release — scrape ResourceWorldResetter reset activity with Prometheus and optionally open a ready-made Grafana dashboard.

@@ -85,8 +85,8 @@ mvn clean verify
 
 Successful builds produce:
 
-- `target/RWR-Prometheus-1.0.0.jar`
-- `target/RWR-Prometheus-1.0.0-dist.zip`
+- `target/RWR-Prometheus-1.0.1.jar`
+- `target/RWR-Prometheus-1.0.1-dist.zip`
 
 CI runs the same `mvn clean verify` on pushes and pull requests to `main`.
 

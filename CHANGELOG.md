@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-13
+
+### Fixed
+
+- Hardened exporter startup, shutdown, configuration validation, HTTP readiness, and reset metric lifecycle handling.
+
+### Changed
+
+- Resolved the public RWR API 5.1.2 contract from Maven Central and verified compatibility with ResourceWorldResetter 5.2.0.
+
 ## [1.0.0] - 2026-09-03
 
 ### Added
@@ -17,5 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a ready-to-run Prometheus and Grafana Docker demo with a provisioned ResourceWorldResetter dashboard.
 - Added a consumer distribution ZIP that packages the plugin JAR, README, and `demo/` folder.
 
-[Unreleased]: https://github.com/TamaWish/RWR-Prometheus/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/TamaWish/RWR-Prometheus/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/TamaWish/RWR-Prometheus/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/TamaWish/RWR-Prometheus/releases/tag/v1.0.0
